@@ -66,6 +66,7 @@ export const ShopContextProvider = (props) => {
       alert("ERROR: Something went wrong");
     }
   };
+
   const fetchPurchasedItems = async () => {
     try {
       const res = await axios.get(
@@ -77,6 +78,7 @@ export const ShopContextProvider = (props) => {
       alert("ERROR: Something went wrong");
     }
   };
+
   const addToCart = (itemId: string) => {
     if (!cartItems[itemId]) {
       setCartItems((prev) => ({ ...prev, [itemId]: 1 }));
@@ -85,27 +87,32 @@ export const ShopContextProvider = (props) => {
     }
     setTotalAmount(totalAmount + 1);
   };
+
   const removeFromCart = (itemId: string) => {
     if (!cartItems[itemId]) return;
     if (cartItems[itemId] == 0) return;
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     setTotalAmount(totalAmount - 1);
   };
+
   const updateCartItemCount = (newAmount: number, itemId: string) => {
     if (!cartItems[itemId]) return;
     if (newAmount < 0) return;
     setTotalAmount(totalAmount + newAmount - cartItems[itemId]);
     setCartItems((prev) => ({ ...prev, [itemId]: newAmount }));
   };
+
   const getCartItemCount = (itemId: string): number => {
     if (itemId in cartItems) {
       return cartItems[itemId];
     }
     return 0;
   };
+
   const totalInCart = () => {
     return totalAmount;
   };
+
   const getTotalCartAmount = () => {
     let totalAmount = 0;
     for (const item in cartItems) {
@@ -118,6 +125,7 @@ export const ShopContextProvider = (props) => {
     }
     return totalAmount;
   };
+
   const checkout = async () => {
     const body = { customerID: localStorage.getItem("userID"), cartItems };
     try {
@@ -148,6 +156,7 @@ export const ShopContextProvider = (props) => {
       alert("ERROR: " + errorMessage);
     }
   };
+
   useEffect(() => {
     if (cookies.access_token) {
       setIsAuthenticated(true);
@@ -159,6 +168,7 @@ export const ShopContextProvider = (props) => {
       fetchPurchasedItems();
     }
   }, [isAuthenticated]);
+
   const conextVal: IShopContext = {
     addToCart,
     removeFromCart,
@@ -175,6 +185,7 @@ export const ShopContextProvider = (props) => {
     setTotalAmount,
     setPurchasedItems,
   };
+
   return (
     <ShopContext.Provider value={conextVal}>
       {props.children}
